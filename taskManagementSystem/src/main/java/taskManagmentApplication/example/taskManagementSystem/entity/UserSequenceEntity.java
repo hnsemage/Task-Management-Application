@@ -6,17 +6,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@Document(collection = "taskSequence")
-@NoArgsConstructor
 @AllArgsConstructor
-@TypeAlias("TaskSequenceEntity")
-public class TaskSequenceEntity {
+@NoArgsConstructor
+@Document(collection = "userSequence")
+@TypeAlias("UserSequenceEntity")
+public class UserSequenceEntity {
+
     @Id
     private String id;
 
     private long value;
-
 
 }

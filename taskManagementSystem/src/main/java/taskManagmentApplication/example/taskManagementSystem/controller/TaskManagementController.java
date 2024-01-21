@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import taskManagmentApplication.example.taskManagementSystem.entity.TaskManagementEntity;
-import taskManagmentApplication.example.taskManagementSystem.entity.TaskSequenceEntity;
 import taskManagmentApplication.example.taskManagementSystem.service.TaskManagementService;
 
 import java.util.List;

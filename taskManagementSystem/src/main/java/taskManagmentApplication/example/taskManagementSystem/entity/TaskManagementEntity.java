@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.*;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 @Document(collection = "tasks")
 @NoArgsConstructor
 @AllArgsConstructor
+@TypeAlias("TaskManagementEntity")
 public class TaskManagementEntity {
 
     @Id
