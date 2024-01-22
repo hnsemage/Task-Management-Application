@@ -1,6 +1,7 @@
 package taskManagmentApplication.example.taskManagementSystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import taskManagmentApplication.example.taskManagementSystem.entity.TaskManagementEntity;
 import taskManagmentApplication.example.taskManagementSystem.entity.TaskSequenceEntity;
@@ -21,6 +22,7 @@ public class TaskManagementService {
     private TaskSequenceRepository taskSequenceRepository;
 
 
+    //To create a task
     public TaskManagementEntity createTasks(TaskManagementEntity task) {
         //Get the current taskId
         TaskSequenceEntity taskSequenceEntity = taskSequenceRepository.findById("taskId").orElseGet(() -> {
@@ -45,20 +47,65 @@ public class TaskManagementService {
 
     }
 
+    //To get all tasks
     public List<TaskManagementEntity> getAllTasks(){
         return taskManagementRepo.findAll();
     }
 
+    //To get all task and sort by username in ascending order
+    public List<TaskManagementEntity> getAllTasksSortByUsername(){
+        Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
+        return taskManagementRepo.findAll(sort);
+    }
+
+    //To get all task and sort by taskId in ascending order
+    public List<TaskManagementEntity> getAllTasksSortByTaskId(){
+        Sort sort = Sort.by(Sort.Order.asc("taskId"));
+        return taskManagementRepo.findAll(sort);
+    }
+
+    //To get task by username
+    public Optional<TaskManagementEntity> getTaskByUsername(String username){
+        return taskManagementRepo.findTaskByUsername(username);
+    }
+
+    //To get task by username and sort by username in ascending order
+    public Optional<TaskManagementEntity> getTaskByUsernameSortByUsername(String username){
+        Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
+        return taskManagementRepo.findByUsernameOrderByUsername(username, sort);
+    }
+
+    //To get task by username and sort by taskId in ascending order
+    public Optional<TaskManagementEntity> getTasksByUsernameSortedByTaskId(String username) {
+        Sort sort = Sort.by(Sort.Order.asc("taskId"));
+        return taskManagementRepo.findByUsernameOrderByTaskId(username, sort);
+    }
+
+    //To get task by taskId
     public Optional<TaskManagementEntity> getTaskById(String id){
         return taskManagementRepo.findById(id);
     }
 
-    public TaskManagementEntity updateTask(String id, TaskManagementEntity updateTask){
-        updateTask.setTaskId(id);
+    //To get task by taskId and sort by username in ascending order
+    public Optional<TaskManagementEntity> getTaskByTaskIdSortByUsername(String username){
+        Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
+        return taskManagementRepo.findByTaskIdSortByUsername(username, sort);
+    }
+
+    //To get task by taskId and sort by taskId in ascending order
+    public Optional<TaskManagementEntity> getTasksByTaskIdSortedByTaskId(String username) {
+        Sort sort = Sort.by(Sort.Order.asc("taskId"));
+        return taskManagementRepo.findByTaskIdSortOrderByTaskId(username, sort);
+    }
+
+    //To update tasks
+    public TaskManagementEntity updateTask(String username, TaskManagementEntity updateTask){
+        updateTask.setTaskId(username);
         return taskManagementRepo.save(updateTask);
     }
 
-    public void deleteTask(String id){
-        taskManagementRepo.deleteById(id);
+    //To delete tasks
+    public void deleteTask(String username){
+        taskManagementRepo.deleteById(username);
     }
 }

@@ -25,7 +25,7 @@ public class TaskManagementEntity {
 
     private String taskName;
     private String assignedTo;
-    private String assignedUserId;
+    private String assignedUsername;
     private String startDate;
     private String startTime;
     private String endDate;

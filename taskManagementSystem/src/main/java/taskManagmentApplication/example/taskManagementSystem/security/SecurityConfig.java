@@ -24,16 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasRole("USER")
-                .and()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasRole("USER")
+                    .and()
                 .formLogin()
-                .and()
+                    .and()
                 .logout()
-                .logoutSuccessUrl("/")
-                .and()
+                    .logoutSuccessUrl("/")
+                    .and()
                 .exceptionHandling().accessDeniedPage("/403")
-                .and()
+                    .and()
                 .csrf().disable();
     }
 

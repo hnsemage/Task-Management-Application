@@ -1,6 +1,5 @@
 package taskManagmentApplication.example.taskManagementSystem.controller;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import taskManagmentApplication.example.taskManagementSystem.entity.UserEntity;
 import taskManagmentApplication.example.taskManagementSystem.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -36,6 +36,11 @@ public class UserController {
         Optional<UserEntity> user= userService.getByUsername(username);
         return user.map(value -> new ResponseEntity<>(value,HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/getAllUsers")
+    public List<UserEntity> getAllUsers(){
+        return userService.getAllUsers();
     }
 
     @PutMapping("updateUser/{username}")
