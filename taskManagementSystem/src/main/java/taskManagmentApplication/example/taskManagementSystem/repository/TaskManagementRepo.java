@@ -26,4 +26,5 @@ public interface TaskManagementRepo extends MongoRepository<TaskManagementEntity
     Optional<TaskManagementEntity> findByTaskIdSortOrderByTaskId(String username, Sort sort);
 
 
+    Optional<TaskManagementEntity> findByTaskName(String taskName);
 }

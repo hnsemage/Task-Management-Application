@@ -19,7 +19,14 @@ public class TaskManagementController {
 
     //To create a task
     @PostMapping("/createTask")
-    public ResponseEntity<TaskManagementEntity> createTask(@RequestBody TaskManagementEntity task){
+    public ResponseEntity<?> createTask(@RequestBody TaskManagementEntity task){
+        String taskName = task.getTaskName();
+
+        //Check if the taskName already exists
+        if (taskManagementService.existsByTaskName(taskName)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Task name already exists. Please choose another.");
+        }
+
         TaskManagementEntity createdTask = taskManagementService.createTasks(task);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }

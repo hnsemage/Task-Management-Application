@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 
 import java.time.LocalDate;
@@ -23,13 +24,11 @@ public class TaskManagementEntity {
     @Field("taskId")
     private String taskId;
 
+    @Indexed(unique = true)
     private String taskName;
-    private String assignedTo;
     private String assignedUsername;
     private String startDate;
-    private String startTime;
     private String endDate;
-    private String endTime;
     private String taskStatus;
 
 
