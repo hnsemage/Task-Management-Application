@@ -54,4 +54,19 @@ public class UserController {
         userService.deleteUser(username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody UserEntity user){
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        UserEntity authenticatedUser = userService.authenticatedUser(username,password);
+
+        if(authenticatedUser != null){
+            String role=userService.getUserRole(username);
+            return "redirect:/dashboard/" + role;
+        }else{
+            return "redirect:/login?error";
+        }
+    }
 }
