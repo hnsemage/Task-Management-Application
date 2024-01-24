@@ -6,6 +6,7 @@ import Login from "./Pages/Login";
 import Registration from "./Pages/Registration";
 import UserPage from "./Pages/UserPage";
 import AdminPage from "./Pages/AdminPage";
+import TaskCreate from "./Pages/TaskCreate";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/register' element={<Registration/>}/>
           <Route path='/adminPage' element={<AdminPage/>}/>
           <Route path='/userPage' element={<UserPage/>}/>
+          <Route path='/taskCreate' element={<TaskCreate/>}/>
         </Routes>
       </Router>
     </div>

@@ -47,12 +47,16 @@ public class UserService {
             user.setUserId(String.valueOf(nextUserId));
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+            user.setRole(user.getRole().toLowerCase());
+
             System.out.println(user.getFirstName());
             return userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while creating a user", e);
         }
     }
+
+
 
     public List<UserEntity> getAllUsers() {
         try {
@@ -135,6 +139,10 @@ public class UserService {
             Optional<UserEntity> existingUser = userRepository.findByUsername(username);
             if (existingUser.isPresent()) {
                 UserEntity user = existingUser.get();
+                System.out.println("Raw Password: " + password);
+                System.out.println("Encoded Password from Database: " + user.getPassword());
+                System.out.println("Encoded Password from Input: " + passwordEncoder.encode(password));
+
                 if (passwordEncoder.matches(password, user.getPassword())) {
                     return user;
                 }
@@ -144,6 +152,7 @@ public class UserService {
             throw new RuntimeException("Error occurred when authenticating", e);
         }
     }
+
 
 
     public String findUserRole(String username) {

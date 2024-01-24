@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button,Box } from '@mui/material';
+import { Container,Button, TextField, FormControl, Box, Typography, MenuItem,styled } from "@mui/material";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+
+
+const BlackMenuItem = styled(MenuItem)({
+  backgroundColor: '#314247', // Set the background color to black
+  '&:hover': {
+    backgroundColor: '#314247', // Keep the background color black on hover
+  },
+  '&.Mui-selected': {
+    backgroundColor: '#314247', // Set the selected item background color
+  },
+  
+});
+
 
 function Registration(){
 
@@ -12,30 +25,40 @@ function Registration(){
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
   
     const [firstNameErr, setFirstNameErr] = useState(false);
     const [lastNameErr, setLastNameErr] = useState(false);
     const [emailErr, setEmailErr] = useState(false);
     const [usernameErr, setUsernameErr] = useState(false);
     const [passwordErr, setPasswordErr] = useState(false);
+    const [roleErr, setRoleErr] = useState(false);
 
     const [messageFirstNameErr, setMessageFirstNameErr] = useState("");
     const [messageLastNameErr, setMessageLastNameErr] = useState("");
     const [messageEmailErr, setMessageEmailErr] = useState("");
     const [messageUsernameErr, setMessageUsernameErr] = useState("");
     const [messagetPasswordErr, setMessagetPasswordErr] = useState("");
+    const [messageRoleErr, setMessageRoleErr] = useState("");
 
     const [recheckFormMessage, setRecheckFormMessage] = useState('');
 
+    const [roleTypes, setRoleTypes] = useState(['Admin', 'User']);
+
+    const handleFirstDropDownChange=(event) =>{
+      const selectedType = event.target.value;
+      setRole(selectedType);}
+
     const handleSubmit = async (e) => {
     
-      //e.preventDefault();
+      e.preventDefault();
     
         setFirstNameErr(false);
         setLastNameErr(false);
         setEmailErr(false);
         setUsernameErr(false);
         setPasswordErr(false);
+        setRoleErr(false);
     
         if (firstName === "") {
           setFirstNameErr(true);
@@ -53,60 +76,69 @@ function Registration(){
     
         if (email === "") {
           setEmailErr(true);
-          setMessageEmailErr("Type Required");
+          setMessageEmailErr("Email Required");
         } else {
           setMessageEmailErr("");
         }
     
         if (username === "") {
           setUsernameErr(true);
-          setMessageUsernameErr("Value Required");
+          setMessageUsernameErr("Username Required");
         }else {
           setMessageUsernameErr("");
         }
     
         if (password === "") {
           setPasswordErr(true);
-          setMessagetPasswordErr("Value Required");
+          setMessagetPasswordErr("Password Required");
         }else {
           setMessagetPasswordErr("");
         }
+
+        if (role === "") {
+          setRoleErr(true);
+          setMessageRoleErr("Role Required");
+        }else {
+          setMessageRoleErr("");
+        }
         
-        if (firstName === "" || lastName === "" || email === "" || username === "" || password === "") {
+        if (firstName === "" || lastName === "" || email === "" || username === "" || password === "" || role ==="") {
           setRecheckFormMessage('Recheck The Form');
         } else {
           setRecheckFormMessage('');
         }
 
-        
 
-        try{
-            //Send the registeration data to the backend
-            const response = await axios.post(
-                'http://localhost:8080/users/createUser',
-                {
-                    firstName,
-                    lastName,
-                    email,
-                    username,
-                    password,  
-                }
-            );
-
-            console.log('Registration successful:', response.data);
-
-          } catch (error) {
-            if (error.response && error.response.status === 409) {
-                // HTTP status 409 indicates a conflict, meaning the username already exists
-                console.error('Registration failed. Username already exists.');
-                setUsernameErr(true);
-                setMessageUsernameErr('Username already exists. Please choose another.');
-            } else {
-                console.error('Registration failed:', error);
-                setUsernameErr(false);
-                setMessageUsernameErr(''); // Clear any previous username error messages
-            }
-        }
+        try {
+          // Send the registration data to the backend
+          const response = await axios.post(
+              'http://localhost:8080/users/createUser',
+              {
+                  firstName,
+                  lastName,
+                  email,
+                  username,
+                  password,
+                  role
+              }
+          );
+      
+          console.log('Registration successful:', response.data);
+          navigate('/');
+      
+      } catch (error) {
+          if (error.response && error.response.status === 409) {
+              // HTTP status 409 indicates a conflict, meaning the username already exists
+              console.error('Registration failed. Username already exists.');
+              setUsernameErr(true);
+              setMessageUsernameErr('Username already exists. Please choose another.');
+          } else {
+              console.error('Registration failed:', error);
+              setUsernameErr(false);
+              setMessageUsernameErr(''); // Clear any previous username error messages
+          }
+      }
+      
     }
 
     return(
@@ -125,7 +157,10 @@ function Registration(){
                         style: { color: "#cca4a6", fontWeight: "bold", fontFamily: "Inika", fontSize: 20 },
                     }}
                     inputProps={{ style: { color: "#cca4a6", fontFamily: "Inika", fontSize: 20 }}}
-                    sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
+                    sx={{ borderRadius: "10px", borderColor: "#cca4a6",
+                    '&.Mui-focused': {
+                      borderColor: '#314247',
+                    }, }}
                     fullWidth
                     required
                     value={firstName}
@@ -204,8 +239,33 @@ function Registration(){
                     error={passwordErr}
                     helperText={messagetPasswordErr}
                     /><br/>
-                    
+                    <FormControl fullWidth  variant="standard" >
+                      <TextField
+                      select
+                      label="Role"
+                      InputLabelProps={{
+                        style: { color: "#cca4a6", fontWeight: "bold", fontFamily: "Inika", fontSize: 20 },
+                      }}
+                      inputProps={{ style: { color: "black", fontSize: 20 } }}
+                      sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
+                      id="filled-search"
+                      variant="filled"
+                      name="role"
+                      value={role}
+                      required
+                      error={roleErr}
+                      helperText={messageRoleErr}
+                      onChange={handleFirstDropDownChange} >
+                        {roleTypes.map((type) => (
+                        <BlackMenuItem key={type} value={type}>
+                          <span style={{ color: "#cca4a6",fontFamily: "Inika", fontSize: 20 }}>{type}</span>
+                        </BlackMenuItem>
+                        ))}
+                        </TextField>
+                    </FormControl>
+                    <br/>
                     <Button
+                    
                     type="submit"
                     variant="contained"
                     onClick={handleSubmit}
@@ -223,24 +283,6 @@ function Registration(){
                         fontSize: 20,
                         }}>
                             Register
-                    </Button>
-                    <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/')}
-                    sx={{
-                        m: 3,
-                        width: '20ch',
-                        backgroundColor: "#647973",
-                        "&:hover": {
-                        backgroundColor: "#314247", // Set the background color on hover
-                        },
-                        color: "black",
-                        fontWeight: "bold",
-                        fontFamily: "Inika",
-                        fontSize: 20,
-                    }}>
-                        Login
                     </Button>
                     <Typography
                     variant="body2"
