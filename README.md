@@ -18,8 +18,13 @@
         1. I have used try/catch method for error handling
 
 2. Frontend
-     - The frontend of the application is developed in ReactJs technology. 
-
+     - The frontend of the application is developed in ReactJs technology.
+     - The css framework used is Material UI.
+     - The dependencies that I have used are mentioned below:
+        1. Axios
+        2. React Router Dom
+        3. Bcrypt
+    
 
 
       
