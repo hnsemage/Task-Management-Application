@@ -60,23 +60,29 @@ public class TaskManagementService {
         }
     }
 
-    //To get all task and sort by username in ascending order
-    public List<TaskManagementEntity> getAllTasksSortByUsername(){
+    //get all the tasks and order by taskId
+    public List<TaskManagementEntity> getAllTasksOrderByTaskId() {
         try {
-            Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
+            // Specify the sorting criteria
+            Sort sort = Sort.by(Sort.Order.asc("taskId"));
+
+            // Use findAll with sorting
             return taskManagementRepo.findAll(sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks and sort by username",e);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving all the tasks", e);
         }
     }
 
-    //To get all task and sort by taskId in ascending order
-    public List<TaskManagementEntity> getAllTasksSortByTaskId(){
+    //get all the tasks and order by taskId
+    public List<TaskManagementEntity> getAllTasksOrderByUsername() {
         try {
-            Sort sort = Sort.by(Sort.Order.asc("taskId"));
+            // Specify the sorting criteria
+            Sort sort = Sort.by(Sort.Order.asc("username"));
+
+            // Use findAll with sorting
             return taskManagementRepo.findAll(sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks and sort by taskId",e);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving all the tasks", e);
         }
     }
 
@@ -89,55 +95,14 @@ public class TaskManagementService {
         }
     }
 
-    //To get task by username and sort by username in ascending order
-    public Optional<TaskManagementEntity> getTaskByUsernameSortByUsername(String username){
-        try {
-            Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
-            return taskManagementRepo.findByUsernameOrderByUsername(username, sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks and sort by username",e);
-        }
-    }
-
-    //To get task by username and sort by taskId in ascending order
-    public Optional<TaskManagementEntity> getTasksByUsernameSortedByTaskId(String username) {
-        try {
-            Sort sort = Sort.by(Sort.Order.asc("taskId"));
-            return taskManagementRepo.findByUsernameOrderByTaskId(username, sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks and sort by taskId",e);
-        }
-    }
-
     //To get task by taskId
-    public Optional<TaskManagementEntity> getTaskById(String id){
+    public Optional<TaskManagementEntity> getTaskById(String taskId){
         try {
-            return taskManagementRepo.findById(id);
+            return taskManagementRepo.findById(taskId);
         }catch (Exception e){
             throw new RuntimeException("An error occurred when retrieving tasks by taskId",e);
         }
     }
-
-    //To get task by taskId and sort by username in ascending order
-    public Optional<TaskManagementEntity> getTaskByTaskIdSortByUsername(String username){
-        try {
-            Sort sort = Sort.by(Sort.Order.asc("assignedUsername"));
-            return taskManagementRepo.findByTaskIdSortByUsername(username, sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks by taskId and sort by username",e);
-        }
-    }
-
-    //To get task by taskId and sort by taskId in ascending order
-    public Optional<TaskManagementEntity> getTasksByTaskIdSortedByTaskId(String username) {
-        try {
-            Sort sort = Sort.by(Sort.Order.asc("taskId"));
-            return taskManagementRepo.findByTaskIdSortOrderByTaskId(username, sort);
-        }catch (Exception e){
-            throw new RuntimeException("An error occurred when retrieving tasks by taskId and sort by taskId",e);
-        }
-    }
-
     //To update tasks
     public TaskManagementEntity updateTask(String taskId, TaskManagementEntity updateTask){
         try {
@@ -151,9 +116,14 @@ public class TaskManagementService {
                     eTask.setTaskName(updateTask.getTaskName());
                 }
 
+                // Check and update description
+                if (updateTask.getDescription() != null && !updateTask.getDescription().equals(eTask.getDescription())){
+                    eTask.setDescription(updateTask.getDescription());
+                }
+
                 // Check and update assignedUsername
-                if (updateTask.getAssignedUsername() != null && !updateTask.getAssignedUsername().equals(eTask.getAssignedUsername())){
-                    eTask.setAssignedUsername(updateTask.getAssignedUsername());
+                if (updateTask.getUsername() != null && !updateTask.getUsername().equals(eTask.getUsername())){
+                    eTask.setUsername(updateTask.getUsername());
                 }
 
                 // Check and update startDate

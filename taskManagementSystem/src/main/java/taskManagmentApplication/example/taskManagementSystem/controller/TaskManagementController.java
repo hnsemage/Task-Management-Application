@@ -37,16 +37,26 @@ public class TaskManagementController {
         return taskManagementService.getAllTasks();
     }
 
-    // To get all tasks sorted by username
-    @GetMapping("/getAllTasksSortedByUsername")
-    public List<TaskManagementEntity> getAllTasksSortByUsername() {
-        return taskManagementService.getAllTasksSortByUsername();
+    //To get all tasks and sort by taskId
+    @GetMapping("/getAllTasksOrderByTaskId")
+    public ResponseEntity<List<TaskManagementEntity>> getAllTasksOrderByTaskId() {
+        try {
+            List<TaskManagementEntity> tasks = taskManagementService.getAllTasksOrderByTaskId();
+            return ResponseEntity.ok(tasks);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);  // You can customize the error response
+        }
     }
 
-    // To get all tasks sorted by taskId
-    @GetMapping("/getAllTasksSortedByTaskId")
-    public List<TaskManagementEntity> getAllTasksSortByTaskId() {
-        return taskManagementService.getAllTasksSortByTaskId();
+    //To get all tasks and sort by taskId
+    @GetMapping("/getAllTasksOrderByUsername")
+    public ResponseEntity<List<TaskManagementEntity>> getAllTasksOrderByUsername() {
+        try {
+            List<TaskManagementEntity> tasks = taskManagementService.getAllTasksOrderByUsername();
+            return ResponseEntity.ok(tasks);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);  // You can customize the error response
+        }
     }
 
     //To get task by username
@@ -57,41 +67,10 @@ public class TaskManagementController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //To get Task by username sorted by username ascending order
-    @GetMapping("getTaskByUsernameSortByUsername/{username}")
-    public ResponseEntity<TaskManagementEntity> getTaskByUsernameSortByUsername(@PathVariable String username){
-        Optional<TaskManagementEntity> task=taskManagementService.getTaskByUsernameSortByUsername(username);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    //To get task by username and sorted by the taskId in ascending order
-    @GetMapping("getTaskByUsernameSortByTaskId/{username}")
-    public ResponseEntity<TaskManagementEntity> getTaskByUsernameSortByTaskId(@PathVariable String username){
-        Optional<TaskManagementEntity> task=taskManagementService.getTasksByUsernameSortedByTaskId(username);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
     //To get task by taskId
     @GetMapping("getTaskByTaskId/{id}")
     public ResponseEntity<TaskManagementEntity> getTaskById(@PathVariable String id){
         Optional<TaskManagementEntity> task=taskManagementService.getTaskById(id);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    //To get task by taskId and sort by username in ascending order
-    @GetMapping("getTaskByTaskIdeSortByUsername/{taskId}")
-    public ResponseEntity<TaskManagementEntity> getTaskByIdSortByUsername(@PathVariable String id){
-        Optional<TaskManagementEntity> task = taskManagementService.getTaskByTaskIdSortByUsername(id);
-        return task.map(value -> new ResponseEntity<>(value,HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    //To get task by taskId and sort by taskId in ascending order
-    public  ResponseEntity<TaskManagementEntity> getTaskByIdSortByTaskId(@PathVariable String id){
-        Optional<TaskManagementEntity> task = taskManagementService.getTasksByTaskIdSortedByTaskId(id);
         return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

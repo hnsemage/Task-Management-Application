@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Column;
 
 @Data
 @AllArgsConstructor
@@ -23,9 +22,13 @@ public class UserEntity {
     @Id
     @Field("userId")
     private String userId;
-
+    private String firstName;
+    private String lastName;
+    private String email;
+    @Field("username")
     @Indexed(unique = true)
     private String username;
     private String password;
     private String role;
+
 }

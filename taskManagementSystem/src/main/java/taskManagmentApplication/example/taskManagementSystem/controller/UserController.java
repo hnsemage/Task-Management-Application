@@ -56,17 +56,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserEntity user){
+    public ResponseEntity<String> login(@RequestBody UserEntity user){
         String username = user.getUsername();
         String password = user.getPassword();
 
         UserEntity authenticatedUser = userService.authenticatedUser(username,password);
 
         if(authenticatedUser != null){
-            String role=userService.getUserRole(username);
-            return "redirect:/dashboard/" + role;
+            String role=userService.findUserRole(username);
+            return ResponseEntity.ok(role);
         }else{
-            return "redirect:/login?error";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
         }
     }
 }

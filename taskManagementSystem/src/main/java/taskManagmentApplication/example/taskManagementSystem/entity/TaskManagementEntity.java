@@ -24,9 +24,9 @@ public class TaskManagementEntity {
     @Field("taskId")
     private String taskId;
 
-    @Indexed(unique = true)
     private String taskName;
-    private String assignedUsername;
+    private String description;
+    private String username;
     private String startDate;
     private String endDate;
     private String taskStatus;
