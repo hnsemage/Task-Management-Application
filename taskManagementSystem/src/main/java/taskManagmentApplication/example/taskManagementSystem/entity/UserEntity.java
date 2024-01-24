@@ -25,7 +25,6 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String email;
-    @Field("username")
     @Indexed(unique = true)
     private String username;
     private String password;

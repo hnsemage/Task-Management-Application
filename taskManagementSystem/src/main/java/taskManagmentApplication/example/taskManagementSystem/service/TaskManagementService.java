@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import taskManagmentApplication.example.taskManagementSystem.entity.TaskManagementEntity;
 import taskManagmentApplication.example.taskManagementSystem.entity.TaskSequenceEntity;
-import taskManagmentApplication.example.taskManagementSystem.entity.UserEntity;
 import taskManagmentApplication.example.taskManagementSystem.repository.TaskManagementRepo;
 import taskManagmentApplication.example.taskManagementSystem.repository.TaskSequenceRepository;
 

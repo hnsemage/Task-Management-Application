@@ -26,9 +26,6 @@ public class UserService {
     @Autowired
     private UserSequenceRepository userSequenceRepository;
 
-    //@Autowired
-    //private PasswordEncoder passwordEncoder;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -50,6 +47,7 @@ public class UserService {
             user.setUserId(String.valueOf(nextUserId));
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+            System.out.println(user.getFirstName());
             return userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while creating a user", e);

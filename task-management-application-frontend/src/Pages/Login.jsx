@@ -17,6 +17,7 @@ function Login() {
   const [messagePasswordErr, setMessagePasswordErr] = useState("");
 
   const handleLogin = async () => {
+    console.log("Handle login function is called");
     setUsernameErr(false);
     setPasswordErr(false);
 
@@ -36,10 +37,10 @@ function Login() {
 
     setError(""); // Clear any previous error messages
     
-    if(!username && !password){
+    if(username && password){
         try{
             const response = await axios.post(
-                "http://localhost:8080/login",
+                "http://localhost:8080/users/login",
                 {
                     username:username,
                     password:password,
@@ -51,9 +52,9 @@ function Login() {
                 console.log("Role:",role);
 
                 //Redirect based on the role
-                if(role === "Admin"){
+                if(role === "admin"){
                     navigate("/adminPage");
-                }else if(role === "User"){
+                }else if(role === "user"){
                     navigate("/userPage");
                 }  
         }catch (error){

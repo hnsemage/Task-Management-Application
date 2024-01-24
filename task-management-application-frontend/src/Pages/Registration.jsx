@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Container, Typography, TextField, Button,Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import bcrypt from 'bcryptjs';
 
 function Registration(){
 
@@ -30,6 +29,7 @@ function Registration(){
 
     const handleSubmit = async (e) => {
     
+      //e.preventDefault();
     
         setFirstNameErr(false);
         setLastNameErr(false);
@@ -78,29 +78,34 @@ function Registration(){
           setRecheckFormMessage('');
         }
 
-        // Hash the password using bcrypt
-        const hashedPassword = await bcrypt.hash(password, 10);
-        setPassword(hashedPassword);
+        
 
         try{
             //Send the registeration data to the backend
             const response = await axios.post(
-                'http://localhost:8080/createUser',
+                'http://localhost:8080/users/createUser',
                 {
                     firstName,
                     lastName,
                     email,
                     username,
-                    password: hashedPassword,  // Send hashed password to the backend
+                    password,  
                 }
             );
 
             console.log('Registration successful:', response.data);
 
-            //Redirect to the login page
-            navigate('/');
-        }catch (error){
-            console.log('Registration failed:',error);
+          } catch (error) {
+            if (error.response && error.response.status === 409) {
+                // HTTP status 409 indicates a conflict, meaning the username already exists
+                console.error('Registration failed. Username already exists.');
+                setUsernameErr(true);
+                setMessageUsernameErr('Username already exists. Please choose another.');
+            } else {
+                console.error('Registration failed:', error);
+                setUsernameErr(false);
+                setMessageUsernameErr(''); // Clear any previous username error messages
+            }
         }
     }
 

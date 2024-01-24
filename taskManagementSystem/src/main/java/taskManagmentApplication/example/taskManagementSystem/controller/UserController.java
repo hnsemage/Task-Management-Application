@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired
@@ -24,11 +25,11 @@ public class UserController {
         // Check if the username already exists
         if (userService.existsByUsername(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists. Please choose another.");
+        } else {
+            // Proceed to create the user
+            UserEntity createdUser = userService.createUser(user);
+            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         }
-
-        // Proceed to create the user
-        UserEntity createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("getUserByUsername/{username}")
@@ -56,17 +57,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserEntity user){
-        String username = user.getUsername();
-        String password = user.getPassword();
+    public ResponseEntity<String> login(@RequestBody UserEntity user) {
+        try {
+            String username = user.getUsername();
+            String password = user.getPassword();
 
-        UserEntity authenticatedUser = userService.authenticatedUser(username,password);
 
-        if(authenticatedUser != null){
-            String role=userService.findUserRole(username);
-            return ResponseEntity.ok(role);
-        }else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+            UserEntity authenticatedUser = userService.authenticatedUser(username, password);
+
+            if (authenticatedUser != null) {
+                String role = userService.findUserRole(username);
+                System.out.println(role);
+                return ResponseEntity.ok(role);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Add this line for detailed exception logging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 }
