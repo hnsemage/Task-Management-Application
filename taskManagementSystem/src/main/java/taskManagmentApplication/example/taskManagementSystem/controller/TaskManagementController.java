@@ -60,33 +60,60 @@ public class TaskManagementController {
         }
     }
 
+    //To get all tasks by username
+    @GetMapping("/getAllTasksByUsername/{username}")
+    public ResponseEntity<List<TaskManagementEntity>> findAllTasksByUsername(@PathVariable String username){
+        try{
+            List<TaskManagementEntity> tasks = taskManagementService.findAllTasksByUsername(username);
+            return ResponseEntity.ok(tasks);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
     //To get task by username
     @GetMapping("getTaskByUsername/{username}")
     public ResponseEntity<TaskManagementEntity> getTaskByUsername(@PathVariable String username){
-        Optional<TaskManagementEntity> task=taskManagementService.getTaskByUsername(username);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<TaskManagementEntity> task = taskManagementService.getTaskByUsername(username);
+            return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     //To get task by taskId
     @GetMapping("getTaskByTaskId/{id}")
     public ResponseEntity<TaskManagementEntity> getTaskById(@PathVariable String id){
-        Optional<TaskManagementEntity> task=taskManagementService.getTaskById(id);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<TaskManagementEntity> task = taskManagementService.getTaskById(id);
+            return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     //To update a task
     @PutMapping("updateTask/{id}")
     public ResponseEntity<TaskManagementEntity> updateTask(@PathVariable String id, @RequestBody TaskManagementEntity updatedTask){
-        TaskManagementEntity updated = taskManagementService.updateTask(id, updatedTask);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        try {
+            TaskManagementEntity updated = taskManagementService.updateTask(id, updatedTask);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     //To delete a task
     @DeleteMapping("deleteTask/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id){
-        taskManagementService.deleteTask(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            taskManagementService.deleteTask(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 }

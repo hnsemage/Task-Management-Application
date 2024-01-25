@@ -12,7 +12,7 @@ const NavigationBar = () => {
     <AppBar position="static" sx={{ backgroundColor: '#314247' }} elevation={0}>
       <Toolbar>
       <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: '#f7f7f7', textDecoration: 'none', fontFamily: 'Orelega One', fontSize: 30 }}>
-          LabSum
+          
         </Typography>
         <IconButton color="inherit" component={Link} to="/"><HomeIcon style={{ fontSize: 30 }}/></IconButton>
         <IconButton color="inherit" component={Link} to="/login"><ProfileIcon style={{ fontSize: 30 }}/></IconButton>

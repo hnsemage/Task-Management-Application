@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Paper,Button, Typography, Box, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@mui/material';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import TaskTable from './TaskTable';
 
 // Define a CSS class to remove borders
 const noBorder = {
@@ -15,7 +15,43 @@ function UserPage(){
     const username = localStorage.getItem("username");
 
     const [userData, setUserData] = useState(null);
+    const [taskData,setTaskData]= useState(null);
     const [loading, setLoading] = useState(true);
+    const [userError, setUserError] = useState(null);
+    const [taskError, setTaskError] = useState(null);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const userData = await axios.get(`http://localhost:8080/users/getUserByUsername/${username}`);
+          setUserData(userData.data);
+      
+          const taskData = await axios.get(`http://localhost:8080/tasks/getAllTasksByUsername/${username}`);
+          setTaskData(taskData.data);
+          console.log('taskData:', taskData);
+      
+          setLoading(false);
+        } catch (error) {
+          console.log('Error occurred when fetching data: ', error);
+          setLoading(false);
+
+          if (error.config && error.config.url) {
+            if (error.config.url.includes('/users/')) {
+              setUserError('User data not found.'); // Set user error
+            } else if (error.config.url.includes('/tasks/')) {
+              setTaskError('Task data not found.'); // Set task error
+            }
+          } else {
+            console.log('Error config or URL not available in the error object.');
+          }
+          
+          setLoading(false);
+        }
+      };      
+
+      fetchData();
+    },[username]
+    )
     return(
         <Container>
             <Box textAlign={"center"}>
@@ -32,6 +68,18 @@ function UserPage(){
             <Box>
               <Table >
                 <TableBody>
+                <TableRow>
+                    <TableCell style={noBorder}>
+                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 20,  fontWeight: "bold",color: "black", textAlign:"center"}}>
+                        User Id:
+                      </Typography>
+                    </TableCell>
+                    <TableCell style={noBorder}>
+                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 17, color: "black", }}>
+                        {userData.userId}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
                   <TableRow>
                     <TableCell style={noBorder}>
                       <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 20,  fontWeight: "bold",color: "black", textAlign:"center"}}>
@@ -53,18 +101,6 @@ function UserPage(){
                     <TableCell style={noBorder}>
                       <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 17, color: "black", }}>
                         {userData.lastName}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={noBorder}>
-                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 20,  fontWeight: "bold",color: "black", textAlign:"center"}}>
-                        Last Name:
-                      </Typography>
-                    </TableCell>
-                    <TableCell style={noBorder}>
-                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 17, color: "black", }}>
-                        {userData.last_name}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -95,18 +131,6 @@ function UserPage(){
                   <TableRow>
                     <TableCell style={noBorder}>
                       <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 20,  fontWeight: "bold",color: "black", textAlign:"center"}}>
-                        Password:
-                      </Typography>
-                    </TableCell>
-                    <TableCell style={noBorder}>
-                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 17, color: "black", }}>
-                        {userData.password}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={noBorder}>
-                      <Typography variant="h6" gutterBottom style={{fontFamily: "Inika", fontSize: 20,  fontWeight: "bold",color: "black", textAlign:"center"}}>
                         Role:
                       </Typography>
                     </TableCell>
@@ -123,59 +147,20 @@ function UserPage(){
           <Typography variant="body1">User data not found.</Typography>
         )}
       </Box><br/><br/>
-      <Box >
-      {userData && userData.records && (
-        <TableContainer component={Paper} style={{backgroundColor: "rgba(186, 223, 231, 0.7)", borderRadius:3}} >
-          <Table>
-            <TableHead >
-              <TableRow >
-                <TableCell style={{fontFamily: "Inika", fontSize: 17,  fontWeight: "bold",color: "black", textAlign:"center", borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    Task Name
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 17,  fontWeight: "bold",color: "black", textAlign:"center",borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    Username
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 17,  fontWeight: "bold",color: "black", textAlign:"center", borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    Start Date
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 17,  fontWeight: "bold",color: "black", textAlign:"center", borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    End Date
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 17,  fontWeight: "bold",color: "black", textAlign:"center", borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    Status
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody textAlign={'center'}>
-              {userData.records.map((record, index) => (
-                <TableRow key={index}>
-                  <TableCell style={{fontFamily: "Inika", fontSize: 15, color: "black",  borderLeft: "2px solid black", borderBottom:"2px solid black"}}>
-                    {record.taskName}
-                </TableCell>
-                  <TableCell style={{fontFamily: "Inika", fontSize: 15, color: "black", borderLeft: "2px solid black", borderBottom:"2px solid black" }}>
-                    {record.username}
-                </TableCell>
-                  <TableCell style={{fontFamily: "Inika", fontSize: 15, color: "black", borderLeft: "2px solid black", borderBottom:"2px solid black" }}>
-                    {record.startDate}
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 15, color: "black", borderLeft: "2px solid black", borderBottom:"2px solid black" }}>
-                    {record.endDate}
-                </TableCell>
-                <TableCell style={{fontFamily: "Inika", fontSize: 15, color: "black", borderLeft: "2px solid black", borderBottom:"2px solid black" }}>
-                    {record.taskStatus}
-                </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+      <Box textAlign="center">
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          // Use the TaskTable component and pass the taskData as a prop
+          <TaskTable taskData={taskData} setTaskData={setTaskData}/>
+        )}
       </Box>
+      
       <Box textAlign="center">
       <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           sx={{
             m: 3,
             width: "20ch",
@@ -187,22 +172,6 @@ function UserPage(){
           }}
         >
           Logout
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(`/taskCreate`)}
-          sx={{
-            m: 3,
-            width: "20ch",
-            backgroundColor: "#BADFE7",
-            color: "black",
-            fontWeight: "bold",
-            fontFamily: "Inika",
-            fontSize: 20,
-          }}
-        >
-          Create Home
         </Button>
       </Box>
         </Container>

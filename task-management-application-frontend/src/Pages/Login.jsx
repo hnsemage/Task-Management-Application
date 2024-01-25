@@ -53,8 +53,10 @@ function Login() {
 
                 //Redirect based on the role
                 if(role === "admin"){
+                  localStorage.setItem("username", username);
                     navigate("/adminPage");
                 }else if(role === "user"){
+                  localStorage.setItem("username", username);
                     navigate("/userPage");
                 }  
         }catch (error){
@@ -185,6 +187,25 @@ function Login() {
             }}
           >
             Register
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/taskCreate")}
+            sx={{
+              m: 3,
+              width: "20ch",
+              backgroundColor: "#647973",
+              "&:hover": {
+                backgroundColor: "#314247", // Set the background color on hover
+              },
+              color: "black",
+              fontWeight: "bold",
+              fontFamily: "Inika",
+              fontSize: 20,
+            }}
+          >
+            Create Task
           </Button>
           {error && (
             <Typography

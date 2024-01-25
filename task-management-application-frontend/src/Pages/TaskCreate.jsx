@@ -21,18 +21,21 @@ function TaskCreate(){
     const navigate = useNavigate();
 
     const [taskName, setTaskName] = useState("");
+    const [description, setDescription] = useState("");
     const [username, setUsername] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [taskStatus, setTaskStatus] = useState("");
   
     const [taskNameErr, setTaskNameErr] = useState(false);
+    const [descriptionErr, setDescriptionErr] = useState(false);
     const [usernameErr, setUsernameErr] = useState(false);
     const [startDateErr, setStartDateErr] = useState(false);
     const [endDateErr, setEndDateErr] = useState(false);
     const [taskStatusErr, setTaskStatusErr] = useState(false);
 
     const [messageTaskNameErr, setMessageTaskNameErr] = useState("");
+    const [messageDescriptionErr, setMessageDescriptionErr] = useState("");
     const [messageUsernameErr, setMessageUsernameErr] = useState("");
     const [messageStartDateErr, setMessageStartDateErr] = useState("");
     const [messageEndDateErr, setMessageEndDateErr] = useState("");
@@ -51,6 +54,7 @@ function TaskCreate(){
       //e.preventDefault();
     
         setTaskNameErr(false);
+        setDescriptionErr(false);
         setUsernameErr(false);
         setStartDate(false);
         setEndDate(false);
@@ -61,6 +65,13 @@ function TaskCreate(){
           setMessageTaskNameErr("Task Name Required");
         } else {
             setMessageTaskNameErr("");
+        }
+
+        if (description === "") {
+          setDescriptionErr(true);
+          setMessageDescriptionErr("Task Name Required");
+        } else {
+            setMessageDescriptionErr("");
         }
     
         if (username === "") {
@@ -91,11 +102,35 @@ function TaskCreate(){
             setMessagetTaskStatusErr("");
         }
         
-        if (taskName === "" || username === "" || startDate === "" || endDate === "" || taskStatus === "" ) {
+        if (taskName === "" || description === ""|| username === "" || startDate === "" || endDate === "" || taskStatus === "" ) {
           setRecheckFormMessage('Recheck The Form');
         } else {
           setRecheckFormMessage('');
         }
+
+        try {
+          // Send the registration data to the backend
+          const response = await axios.post(
+              'http://localhost:8080/tasks/createTask',
+              {
+                  taskName,
+                  description,
+                  username,
+                  startDate,
+                  endDate,
+                  taskStatus
+              }
+          );
+      
+          console.log('Task creation successful:', response.data);
+          navigate('/');
+      
+      } catch (error) {
+              console.error('Task creation failed:', error);
+              setUsernameErr(false);
+              setMessageUsernameErr(''); 
+          
+      }
     }
 
     return(
@@ -124,6 +159,23 @@ function TaskCreate(){
                     onChange={(e) => setTaskName(e.target.value)}
                     error={taskNameErr}
                     helperText={messageTaskNameErr}/>
+                    <br/>
+                    <TextField
+                    name="description"
+                    label="Description"
+                    id="filled-search"
+                    variant="filled"
+                    InputLabelProps={{
+                        style: { color: "#cca4a6", fontWeight: "bold", fontFamily: "Inika", fontSize: 20 },
+                    }}
+                    inputProps={{ style: { color: "#cca4a6", fontFamily: "Inika", fontSize: 20 }}}
+                    sx={{ borderRadius: "10px", borderColor: "#cca4a6"}}
+                    fullWidth
+                    required
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    error={descriptionErr}
+                    helperText={messageDescriptionErr}/>
                     <br/>
                     <TextField
                     name="username"
@@ -240,7 +292,7 @@ function TaskCreate(){
                         fontFamily: "Inika",
                         fontSize: 20,
                     }}>
-                        Profile
+                        Back
                     </Button>
                     <Typography
                     variant="body2"

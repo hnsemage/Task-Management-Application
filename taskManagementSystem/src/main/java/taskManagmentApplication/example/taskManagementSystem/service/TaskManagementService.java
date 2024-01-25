@@ -85,6 +85,15 @@ public class TaskManagementService {
         }
     }
 
+    //To get all tasks by username
+    public List<TaskManagementEntity> findAllTasksByUsername(String username){
+        try{
+            return taskManagementRepo.findAllTasksByUsername(username);
+        }catch (Exception e){
+            throw new RuntimeException("An error occurred while retrieving all tasks using username",e);
+        }
+    }
+
     //To get task by username
     public Optional<TaskManagementEntity> getTaskByUsername(String username){
         try {
