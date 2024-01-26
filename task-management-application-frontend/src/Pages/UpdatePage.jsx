@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container,Button, TextField, FormControl, Box, Typography, MenuItem,styled } from "@mui/material";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 
 const BlackMenuItem = styled(MenuItem)({
@@ -16,16 +16,39 @@ const BlackMenuItem = styled(MenuItem)({
 });
 
 
-function TaskCreate(){
+function UpdatePage(){
 
     const navigate = useNavigate();
+    const{taskId} = useParams();
+    
+    const [user, setUser] = useState({});
+    const [task,setTask] = useState({
+        taskName:"",
+        description:"",
+        username:"",
+        startDate:"",
+        endDate:"",
+        taskStatus:"",
+    });
 
-    const [taskName, setTaskName] = useState("");
-    const [description, setDescription] = useState("");
-    const [username, setUsername] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [taskStatus, setTaskStatus] = useState("");
+    useEffect(() => {
+        const fetchTaskDetails = async () => {
+            try {
+                console.log(`http://localhost:8080/tasks/getTaskByTaskId/${taskId}`);
+                const response = await axios.get(`http://localhost:8080/tasks/getTaskByTaskId/${taskId}`);
+
+                const userResponse = await axios.get(`http://localhost:8080/users/getUserByUsername/${response.data.username}`);
+                setUser(userResponse.data);
+                setTask(response.data);
+            } catch (error) {
+                console.log('Error when fetching task details:', error);
+            }
+        };
+    
+        fetchTaskDetails();
+    }, [taskId]);
+    
+      
   
     const [taskNameErr, setTaskNameErr] = useState(false);
     const [descriptionErr, setDescriptionErr] = useState(false);
@@ -47,7 +70,8 @@ function TaskCreate(){
 
     const handleFirstDropDownChange=(event) =>{
       const selectedType = event.target.value;
-      setTaskStatus(selectedType);}
+      setTask({...task, taskStatus:selectedType});
+    }
 
     const handleSubmit = async (e) => {
     
@@ -60,84 +84,90 @@ function TaskCreate(){
         setEndDateErr(false);
         setTaskStatusErr(false);
     
-        if (taskName === "") {
+        if (task.taskName === "") {
           setTaskNameErr(true);
           setMessageTaskNameErr("Task Name Required");
         } else {
             setMessageTaskNameErr("");
         }
 
-        if (description === "") {
+        if (task.description === "") {
           setDescriptionErr(true);
           setMessageDescriptionErr("Task Name Required");
         } else {
             setMessageDescriptionErr("");
         }
     
-        if (username === "") {
+        if (task.username === "") {
           setUsernameErr(true);
           setMessageUsernameErr("Username Required");
         } else {
             setMessageUsernameErr("");
         }
     
-        if (startDate === "") {
+        if (task.startDate === "") {
           setStartDateErr(true);
           setMessageStartDateErr("Start Date Required");
         } else {
           setMessageStartDateErr("");
         }
     
-        if (endDate === "") {
+        if (task.endDate === "") {
           setEndDateErr(true);
           setMessageEndDateErr("End Date Required");
         }else {
           setMessageEndDateErr("");
         }
     
-        if (taskStatus === "") {
+        if (task.taskStatus === "") {
             setTaskStatusErr(true);
             setMessagetTaskStatusErr("Task Status Required");
         }else {
             setMessagetTaskStatusErr("");
         }
         
-        if (taskName === "" || description === ""|| username === "" || startDate === "" || endDate === "" || taskStatus === "" ) {
+        if (task.taskName === "" || task.description === ""|| task.username === "" || task.startDate === "" || task.endDate === "" || task.taskStatus === "" ) {
           setRecheckFormMessage('Recheck The Form');
         } else {
           setRecheckFormMessage('');
-        }
 
+          try {
+            await axios.put(`http://localhost:8080/tasks/updateTask/${taskId}`, task);
+            if (user.role === 'user') {
+                navigate(`/userPage/${user.username}`);
+            } else if (user.role === 'admin') {
+                navigate(`/adminPage/${user.username}`);
+            } else {
+                console.error('Unknown role:', user.role);
+            }
+        } catch (error) {
+            console.log("Error in updating task: ", error);
+        }
+        
+        }
+    };
+    const handleBack = () => {
         try {
-          // Send the registration data to the backend
-          const response = await axios.post(
-              'http://localhost:8080/tasks/createTask',
-              {
-                  taskName,
-                  description,
-                  username,
-                  startDate,
-                  endDate,
-                  taskStatus
-              }
-          );
-      
-          console.log('Task creation successful:', response.data);
-          navigate('/');
-      
-      } catch (error) {
-              console.error('Task creation failed:', error);
-              setUsernameErr(false);
-              setMessageUsernameErr(''); 
-          
-      }
-    }
+        
+            if (user.role === 'user') {
+                console.log('Navigating to user page:', `/userPage/${user.username}`);
+                navigate(`/userPage/${user.username}`);
+            } else if (user.role === 'admin') {
+                console.log('Navigating to admin page:', `/adminPage/${user.username}`);
+                navigate(`/adminPage/${user.username}`);
+            } else {
+                console.error('Unknown role:', user.role);
+            }
+        } catch (error) {
+            console.log("Error in updating task: ", error);
+        }
+      };
 
     return(
         <Container>
-            <Box textAlign="center" m={4}>
+            <Box style={{ textAlign: 'center', }} m={4}>
                 <Typography variant="h5" gutterBottom style={{ fontFamily: "Inika", fontSize: 58, fontWeight: "bold", color: "#f7f7f7" }}>
-                    Register
+                    Update Task
                 </Typography>
                 <form>
                     <TextField
@@ -155,8 +185,8 @@ function TaskCreate(){
                     }, }}
                     fullWidth
                     required
-                    value={taskName}
-                    onChange={(e) => setTaskName(e.target.value)}
+                    value={task.taskName}
+                    onChange={(e) => setTask({ ...task, taskName: e.target.value })}
                     error={taskNameErr}
                     helperText={messageTaskNameErr}/>
                     <br/>
@@ -172,8 +202,8 @@ function TaskCreate(){
                     sx={{ borderRadius: "10px", borderColor: "#cca4a6"}}
                     fullWidth
                     required
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={task.description}
+                    onChange={(e) => setTask({ ...task, description: e.target.value })}
                     error={descriptionErr}
                     helperText={messageDescriptionErr}/>
                     <br/>
@@ -189,8 +219,8 @@ function TaskCreate(){
                     sx={{ borderRadius: "10px", borderColor: "#cca4a6"}}
                     fullWidth
                     required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={task.username}
+                    onChange={(e) => setTask({ ...task, username: e.target.value })}
                     error={usernameErr}
                     helperText={messageUsernameErr}/>
                     <br/>
@@ -208,8 +238,8 @@ function TaskCreate(){
                     sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
                     fullWidth
                     required
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    value={task.startDate}
+                    onChange={(e) => setTask({ ...task, startDate: e.target.value })}
                     error={startDateErr}
                     helperText={messageStartDateErr}/>
                     <br/>
@@ -226,38 +256,38 @@ function TaskCreate(){
                     sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
                     fullWidth
                     required
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    value={task.endDate}
+                    onChange={(e) => setTask({ ...task, endDate: e.target.value })}
                     error={endDateErr}
                     helperText={messageEndDateErr}/>
                     <br/>
                     <FormControl fullWidth  variant="standard" >
-                      <TextField
-                      select
-                      label="Task Status"
-                      InputLabelProps={{
-                        style: { color: "#cca4a6", fontWeight: "bold", fontFamily: "Inika", fontSize: 20 },
-                      }}
-                      inputProps={{ style: { color: "black", fontSize: 20 } }}
-                      sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
-                      id="filled-search"
-                      variant="filled"
-                      name="taskStatus"
-                      value={taskStatus}
-                      required
-                      error={taskStatusErr}
-                      helperText={messagetTaskStatusErr}
-                      onChange={handleFirstDropDownChange} >
-                        {taskStatusTypes.map((type) => (
-                        <BlackMenuItem key={type} value={type}>
-                          <span style={{ color: "#cca4a6",fontFamily: "Inika", fontSize: 20 }}>{type}</span>
-                        </BlackMenuItem>
-                        ))}
+                        <TextField
+                        name="taskStatus"
+                        select
+                        label="Task Status"
+                        InputLabelProps={{
+                            style: { color: "#cca4a6", fontWeight: "bold", fontFamily: "Inika", fontSize: 20 },
+                        }}
+                        inputProps={{ style: { color: "black", fontSize: 20 } }}
+                        sx={{ borderRadius: "10px", borderColor: "#cca4a6" }}
+                        variant="filled"
+                        fullWidth
+                        required
+                        value={task.taskStatus}
+                        error={taskStatusErr}
+                        helperText={messagetTaskStatusErr}
+                        onChange={handleFirstDropDownChange}
+                        >
+                            {taskStatusTypes.map((type) => (
+                            <BlackMenuItem key={type} value={type}>
+                                <span style={{ color: "#cca4a6", fontFamily: "Inika", fontSize: 20 }}>{type}</span>
+                            </BlackMenuItem>
+                            ))}
                         </TextField>
                     </FormControl>
                     <br/>
                     <Button
-                    
                     type="submit"
                     variant="contained"
                     onClick={handleSubmit}
@@ -267,32 +297,33 @@ function TaskCreate(){
                         width: "20ch",
                         backgroundColor: "#647973",
                         "&:hover": {
-                        backgroundColor: "#314247", // Set the background color on hover
+                        backgroundColor: "#314247", 
                         },
                         color: "black",
                         fontWeight: "bold",
                         fontFamily: "Inika",
                         fontSize: 20,
                         }}>
-                            Create
+                            Update
                     </Button>
                     <Button
+                    type="submit"
                     variant="contained"
+                    onClick={handleBack}
                     color="primary"
-                    onClick={() => navigate('/')}
                     sx={{
                         m: 3,
-                        width: '20ch',
+                        width: "20ch",
                         backgroundColor: "#647973",
                         "&:hover": {
-                        backgroundColor: "#314247", // Set the background color on hover
+                        backgroundColor: "#314247", 
                         },
                         color: "black",
                         fontWeight: "bold",
                         fontFamily: "Inika",
                         fontSize: 20,
-                    }}>
-                        Back
+                        }}>
+                            Back
                     </Button>
                     <Typography
                     variant="body2"
@@ -311,4 +342,4 @@ function TaskCreate(){
         </Container>
     );
 }
-export default TaskCreate;
+export default UpdatePage;

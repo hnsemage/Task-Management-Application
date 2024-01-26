@@ -54,10 +54,12 @@ function Login() {
                 //Redirect based on the role
                 if(role === "admin"){
                   localStorage.setItem("username", username);
-                    navigate("/adminPage");
+                  navigate(`/adminPage/${username}`);
+
                 }else if(role === "user"){
                   localStorage.setItem("username", username);
-                    navigate("/userPage");
+                  navigate(`/userPage/${username}`);
+
                 }  
         }catch (error){
             console.error("Error during login:", error);

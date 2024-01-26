@@ -2,10 +2,14 @@
 import React from 'react';
 import axios from 'axios';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,Button } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 const TaskTable = ({ taskData , setTaskData}) => {
+  const navigate = useNavigate();
+
         const handleUpdate = (taskId) => {
-          // Implement the update functionality here
+          const selectedTask = taskData.find((task) => task.taskId === taskId)
+          navigate(`/update/${taskId}`, {state:selectedTask});
           console.log(`Update button clicked for Task ID: ${taskId}`);
         };
       
@@ -35,7 +39,7 @@ const TaskTable = ({ taskData , setTaskData}) => {
             <TableCell style={{ border: '1px solid white',fontWeight: 'bold', fontSize: '15px'}} align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody textAlign={'center'}>
+        <TableBody style={{ textAlign: 'center' }}>
           {taskData.map((record, index) => (
             <TableRow key={index}>
               <TableCell style={{ border: '1px solid white'}} align="center">{record.taskId}</TableCell>
@@ -44,7 +48,7 @@ const TaskTable = ({ taskData , setTaskData}) => {
               <TableCell style={{ border: '1px solid white'}} align="center">{record.startDate}</TableCell>
               <TableCell style={{ border: '1px solid white'}} align="center">{record.endDate}</TableCell>
               <TableCell style={{ border: '1px solid white'}} align="center">{record.taskStatus}</TableCell>
-              <TableCell style={{ border: '1px solid white'}} align="center"><Button variant="outlined" color="primary" onClick={() => handleUpdate(record._id)} style={{ marginRight: '8px' }}>
+              <TableCell style={{ border: '1px solid white'}} align="center"><Button variant="outlined" color="primary" onClick={() => handleUpdate(record.taskId)} style={{ marginRight: '8px' }}>
                       Update
                     </Button>
                     <Button variant="outlined" color="secondary" onClick={() => handleDelete(record.taskId)}>

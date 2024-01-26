@@ -54,7 +54,7 @@ function UserPage(){
     )
     return(
         <Container>
-            <Box textAlign={"center"}>
+            <Box style={{ textAlign: 'center' }}>
             <Typography variant="h3" style={{fontFamily: "Inika", fontSize: 45, fontWeight: "bold", color: "#C0C2E3", }} component="div" gutterBottom>
                 User Profile
             </Typography>
@@ -147,7 +147,7 @@ function UserPage(){
           <Typography variant="body1">User data not found.</Typography>
         )}
       </Box><br/><br/>
-      <Box textAlign="center">
+      <Box style={{ textAlign: 'center' }}>
         {loading ? (
           <CircularProgress />
         ) : (
@@ -156,7 +156,7 @@ function UserPage(){
         )}
       </Box>
       
-      <Box textAlign="center">
+      <Box style={{ textAlign: 'center' }}>
       <Button
           variant="contained"
           color="primary"

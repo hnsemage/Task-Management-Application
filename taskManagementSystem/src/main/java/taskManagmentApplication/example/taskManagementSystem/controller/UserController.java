@@ -18,6 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //To create a user
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody UserEntity user) {
         String username = user.getUsername();
@@ -32,6 +33,7 @@ public class UserController {
         }
     }
 
+    //To get user by username
     @GetMapping("getUserByUsername/{username}")
     public ResponseEntity<UserEntity> getUserByUsername(@PathVariable String username){
         Optional<UserEntity> user= userService.getByUsername(username);
@@ -39,23 +41,27 @@ public class UserController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    //To get all the users
     @GetMapping("/getAllUsers")
     public List<UserEntity> getAllUsers(){
         return userService.getAllUsers();
     }
 
+    //To update user by username
     @PutMapping("updateUser/{username}")
     public ResponseEntity<UserEntity> updateUser(@PathVariable String username, @RequestBody UserEntity updatedUser){
         UserEntity updated= userService.updateUser(username,updatedUser);
         return new ResponseEntity<>(updated,HttpStatus.OK);
     }
 
-    @DeleteMapping("deleteTask/{username}")
+    //To delete user by username
+    @DeleteMapping("deleteUser/{username}")
     public ResponseEntity<Void> deleteUser(@PathVariable String username){
         userService.deleteUser(username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //To log 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity user) {
         try {

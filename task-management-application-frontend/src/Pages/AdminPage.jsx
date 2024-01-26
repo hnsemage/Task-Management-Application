@@ -54,12 +54,12 @@ function AdminPage(){
     )
     return(
         <Container>
-            <Box textAlign={"center"}>
+            <Box style={{ textAlign: 'center' }}>
             <Typography variant="h3" style={{fontFamily: "Inika", fontSize: 45, fontWeight: "bold", color: "#C0C2E3", }} component="div" gutterBottom>
                 User Profile
             </Typography>
             </Box>
-            <Box textAlign="center" style={{backgroundColor: "rgba(186, 223, 231, 0.7)"}} sx={{ maxWidth: 900,marginLeft:18,marginRight:18,marginBottom:3,borderRadius:2}} >
+            <Box style={{backgroundColor: "rgba(186, 223, 231, 0.7)",textAlign: 'center'}} sx={{ maxWidth: 900,marginLeft:18,marginRight:18,marginBottom:3,borderRadius:2}} >
         {loading ? (
           <Box display="flex" justifyContent="center" mt={4}>
             <CircularProgress />
@@ -147,7 +147,7 @@ function AdminPage(){
           <Typography variant="body1">User data not found.</Typography>
         )}
       </Box><br/><br/>
-      <Box textAlign="center">
+      <Box style={{ textAlign: 'center' }}>
         {loading ? (
           <CircularProgress />
         ) : (
@@ -156,7 +156,7 @@ function AdminPage(){
         )}
       </Box>
       
-      <Box textAlign="center">
+      <Box style={{ textAlign: 'center' }}>
       <Button
           variant="contained"
           color="primary"

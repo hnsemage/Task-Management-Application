@@ -84,10 +84,10 @@ public class TaskManagementController {
     }
 
     //To get task by taskId
-    @GetMapping("getTaskByTaskId/{id}")
-    public ResponseEntity<TaskManagementEntity> getTaskById(@PathVariable String id){
+    @GetMapping("getTaskByTaskId/{taskid}")
+    public ResponseEntity<TaskManagementEntity> getTaskById(@PathVariable String taskid){
         try {
-            Optional<TaskManagementEntity> task = taskManagementService.getTaskById(id);
+            Optional<TaskManagementEntity> task = taskManagementService.getTaskById(taskid);
             return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         }catch (Exception e){
