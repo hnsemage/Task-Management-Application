@@ -264,7 +264,6 @@ function TaskCreate(){
                     color="primary"
                     sx={{
                         m: 3,
-                        width: "20ch",
                         backgroundColor: "#647973",
                         "&:hover": {
                         backgroundColor: "#314247", // Set the background color on hover
@@ -282,7 +281,6 @@ function TaskCreate(){
                     onClick={() => navigate('/')}
                     sx={{
                         m: 3,
-                        width: '20ch',
                         backgroundColor: "#647973",
                         "&:hover": {
                         backgroundColor: "#314247", // Set the background color on hover

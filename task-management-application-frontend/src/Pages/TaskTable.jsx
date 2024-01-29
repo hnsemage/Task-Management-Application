@@ -115,12 +115,25 @@ const TaskTable = ({ taskData , setTaskData}) => {
               <TableCell style={{ border: '1px solid white'}} align="center">{record.startDate}</TableCell>
               <TableCell style={{ border: '1px solid white'}} align="center">{record.endDate}</TableCell>
               <TableCell style={{ border: '1px solid white'}} align="center">{record.taskStatus}</TableCell>
-              <TableCell style={{ border: '1px solid white'}} align="center"><Button variant="outlined" color="primary" onClick={() => handleUpdate(record.taskId)} style={{ marginRight: '8px' }}>
-                      Update
-                    </Button>
-                    <Button variant="outlined" color="secondary" onClick={() => handleDelete(record.taskId)}>
-                      Delete
-                    </Button></TableCell>
+              <TableCell style={{ border: '1px solid white'}} align="center">
+                <Button variant="contained" onClick={() => handleUpdate(record.taskId)} style={{ marginRight: '8px' }}
+                sx={{
+                  backgroundColor: "#314247",
+                  color: "#BADFE7",
+                  fontFamily: "Inika",
+                  fontSize: 15,
+                }}>
+                  Update
+                </Button>
+                <Button variant="contained"  onClick={() => handleDelete(record.taskId)}
+                sx={{
+                  backgroundColor: "#314247",
+                  color: "#BADFE7",
+                  fontFamily: "Inika",
+                  fontSize: 15,
+                }}>
+                  Delete
+                </Button></TableCell>
             </TableRow>
           ))}
         </TableBody>

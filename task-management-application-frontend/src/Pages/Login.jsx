@@ -159,7 +159,6 @@ function Login() {
             onClick={handleLogin}
             sx={{
               m: 3,
-              width: "20ch",
               backgroundColor: "#647973",
               "&:hover": {
                 backgroundColor: "#314247", // Set the background color on hover
@@ -177,7 +176,6 @@ function Login() {
             onClick={() => navigate("/register")}
             sx={{
               m: 3,
-              width: "20ch",
               backgroundColor: "#647973",
               "&:hover": {
                 backgroundColor: "#314247", // Set the background color on hover
@@ -196,7 +194,6 @@ function Login() {
             onClick={() => navigate("/taskCreate")}
             sx={{
               m: 3,
-              width: "20ch",
               backgroundColor: "#647973",
               "&:hover": {
                 backgroundColor: "#314247", // Set the background color on hover

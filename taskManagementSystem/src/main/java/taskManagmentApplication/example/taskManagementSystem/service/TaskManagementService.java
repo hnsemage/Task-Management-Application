@@ -167,7 +167,7 @@ public class TaskManagementService {
         }
     }
 
-    //Find of the taskname is available 
+    //Find of the taskname is available
     public boolean existsByTaskName(String taskName) {
         try {
             Optional<TaskManagementEntity> existingTaskName = taskManagementRepo.findByTaskName(taskName);

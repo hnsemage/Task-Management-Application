@@ -15,8 +15,7 @@ const NavigationBar = () => {
           
         </Typography>
         <IconButton color="inherit" component={Link} to="/"><HomeIcon style={{ fontSize: 30 }}/></IconButton>
-        <IconButton color="inherit" component={Link} to="/login"><ProfileIcon style={{ fontSize: 30 }}/></IconButton>
-        <IconButton color="inherit" component={Link} to="/help"><InfoIcon style={{ fontSize: 30 }}/></IconButton>
+        <IconButton color="inherit" component={Link} to="/register"><ProfileIcon style={{ fontSize: 30 }}/></IconButton>
       </Toolbar>
     </AppBar>
   );

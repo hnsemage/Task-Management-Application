@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper,Button, Typography, Box, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@mui/material';
+import { Container,Button, Typography, Box, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import TaskTable from './TaskTable';
@@ -151,7 +151,7 @@ function AdminPage(){
               variant="contained"
               color="primary"
               onClick={handleUpdateUser}
-              sx={{m: 3, width: "20ch", backgroundColor: "#BADFE7", color: "black", fontWeight: "bold",fontFamily: "Inika", fontSize: 20,}}>
+              sx={{m: 3,  backgroundColor: "#BADFE7", color: "black", fontWeight: "bold",fontFamily: "Inika", fontSize: 20,}}>
                 Update User
               </Button>
           </Box>
@@ -175,7 +175,6 @@ function AdminPage(){
           onClick={() => navigate('/')}
           sx={{
             m: 3,
-            width: "20ch",
             backgroundColor: "#BADFE7",
             color: "black",
             fontWeight: "bold",
@@ -184,6 +183,36 @@ function AdminPage(){
           }}
         >
           Logout
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/viewalltasks')}
+          sx={{
+            m: 3,
+            backgroundColor: "#BADFE7",
+            color: "black",
+            fontWeight: "bold",
+            fontFamily: "Inika",
+            fontSize: 20,
+          }}
+        >
+          View All Tasks
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/viewallusers')}
+          sx={{
+            m: 3,
+            backgroundColor: "#BADFE7",
+            color: "black",
+            fontWeight: "bold",
+            fontFamily: "Inika",
+            fontSize: 20,
+          }}
+        >
+          View All Users
         </Button>
       </Box>
         </Container>

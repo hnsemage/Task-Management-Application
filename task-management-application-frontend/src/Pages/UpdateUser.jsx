@@ -206,7 +206,6 @@ function UpdateUser(){
                         color="primary"
                         sx={{
                             m: 3,
-                            width: "20ch",
                             backgroundColor: "#647973",
                             "&:hover": {
                                 backgroundColor: "#314247", 
@@ -226,7 +225,6 @@ function UpdateUser(){
                         color="primary"
                         sx={{
                             m: 3,
-                            width: "20ch",
                             backgroundColor: "#647973",
                             "&:hover": {
                                 backgroundColor: "#314247", 

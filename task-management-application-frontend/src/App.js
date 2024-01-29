@@ -9,6 +9,9 @@ import AdminPage from "./Pages/AdminPage";
 import TaskCreate from "./Pages/TaskCreate";
 import UpdateTask from "./Pages/UpdateTask";
 import UpdateUser from "./Pages/UpdateUser";
+import ViewAllTasks from "./Pages/ViewAllTasks";
+import ViewAllUsers from "./Pages/ViewAllUsers";
+
 
 function App() {
   return (
@@ -23,6 +26,8 @@ function App() {
           <Route path='/taskCreate' element={<TaskCreate/>}/>
           <Route path='/update/:taskId' element={<UpdateTask/>}/>
           <Route path='/updateUser/:username' element={<UpdateUser/>}/>
+          <Route path='/viewalltasks' element={<ViewAllTasks/>}/>
+          <Route path='/viewallusers' element={<ViewAllUsers/>}/>
         </Routes>
       </Router>
     </div>
