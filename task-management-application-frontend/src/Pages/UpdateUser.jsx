@@ -103,9 +103,21 @@ function UpdateUser(){
     };
 
     const handleBack = () => {
-        // Navigate back to the UserPage
-        navigate(`/userPage/${username}`);
-    };
+        try {
+        
+            if (user.role === 'user') {
+                console.log('Navigating to user page:', `/userPage/${user.username}`);
+                navigate(`/userPage/${user.username}`);
+            } else if (user.role === 'admin') {
+                console.log('Navigating to admin page:', `/adminPage/${user.username}`);
+                navigate(`/adminPage/${user.username}`);
+            } else {
+                console.error('Unknown role:', user.role);
+            }
+        } catch (error) {
+            console.log("Error in updating task: ", error);
+        }
+      };
    
     return(
         <Container>
