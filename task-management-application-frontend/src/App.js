@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavigationBar from "./NavigationBar/NavigationBar";
@@ -7,7 +7,8 @@ import Registration from "./Pages/Registration";
 import UserPage from "./Pages/UserPage";
 import AdminPage from "./Pages/AdminPage";
 import TaskCreate from "./Pages/TaskCreate";
-import UpdatePage from "./Pages/UpdatePage";
+import UpdateTask from "./Pages/UpdateTask";
+import UpdateUser from "./Pages/UpdateUser";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
           <Route path='/adminPage/:username' element={<AdminPage/>}/>
           <Route path='/userPage/:username' element={<UserPage/>}/>
           <Route path='/taskCreate' element={<TaskCreate/>}/>
-          <Route path='/update/:taskId' element={<UpdatePage/>}/>
+          <Route path='/update/:taskId' element={<UpdateTask/>}/>
+          <Route path='/updateUser/:username' element={<UpdateUser/>}/>
         </Routes>
       </Router>
     </div>

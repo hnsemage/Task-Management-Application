@@ -16,7 +16,7 @@ const BlackMenuItem = styled(MenuItem)({
 });
 
 
-function UpdatePage(){
+function UpdateTask(){
 
     const navigate = useNavigate();
     const{taskId} = useParams();
@@ -93,7 +93,7 @@ function UpdatePage(){
 
         if (task.description === "") {
           setDescriptionErr(true);
-          setMessageDescriptionErr("Task Name Required");
+          setMessageDescriptionErr("Description Required");
         } else {
             setMessageDescriptionErr("");
         }
@@ -133,13 +133,6 @@ function UpdatePage(){
 
           try {
             await axios.put(`http://localhost:8080/tasks/updateTask/${taskId}`, task);
-            if (user.role === 'user') {
-                navigate(`/userPage/${user.username}`);
-            } else if (user.role === 'admin') {
-                navigate(`/adminPage/${user.username}`);
-            } else {
-                console.error('Unknown role:', user.role);
-            }
         } catch (error) {
             console.log("Error in updating task: ", error);
         }
@@ -342,4 +335,4 @@ function UpdatePage(){
         </Container>
     );
 }
-export default UpdatePage;
+export default UpdateTask;

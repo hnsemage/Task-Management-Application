@@ -75,9 +75,9 @@ public class UserService {
         }
     }
 
-    public UserEntity updateUser(String userId, UserEntity updateUser) {
+    public UserEntity updateUser(String username, UserEntity updateUser) {
         try {
-            Optional<UserEntity> exsitingUser = userRepository.findById(userId);
+            Optional<UserEntity> exsitingUser = userRepository.findByUsername(username);
 
             if (exsitingUser.isPresent()) {
                 UserEntity eUser = exsitingUser.get();
@@ -104,12 +104,13 @@ public class UserService {
 
                 //Check and update role
                 if (updateUser.getRole() != null && !updateUser.getRole().equals(eUser.getRole())) {
-                    eUser.setRole(updateUser.getRole());
+                    String lowercaseRole = updateUser.getRole().toLowerCase(); // Convert role to lowercase
+                    eUser.setRole(lowercaseRole);
                 }
 
                 return userRepository.save(updateUser);
             } else {
-                throw new ResourceAccessException("User is not found" + userId);
+                throw new ResourceAccessException("User is not found" + username);
             }
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while updating the user", e);

@@ -51,7 +51,12 @@ function AdminPage(){
 
       fetchData();
     },[username]
-    )
+    );
+
+    const handleUpdateUser = () => {
+      navigate(`/updateUser/${username}`);
+    };
+
     return(
         <Container>
             <Box style={{ textAlign: 'center' }}>
@@ -142,6 +147,13 @@ function AdminPage(){
                   </TableRow>
                 </TableBody>
               </Table>
+              <Button
+              variant="contained"
+              color="primary"
+              onClick={handleUpdateUser}
+              sx={{m: 3, width: "20ch", backgroundColor: "#BADFE7", color: "black", fontWeight: "bold",fontFamily: "Inika", fontSize: 20,}}>
+                Update User
+              </Button>
           </Box>
         ) : (
           <Typography variant="body1">User data not found.</Typography>

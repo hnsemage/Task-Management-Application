@@ -16,7 +16,7 @@ const TaskTable = ({ taskData , setTaskData}) => {
         const handleDelete = async(taskId) => {
             try{
                 await axios.delete(`http://localhost:8080/tasks/deleteTask/${taskId}`);
-      // Update the local state to reflect the changes
+                // Update the local state to reflect the changes
                 setTaskData((prevTaskData) => prevTaskData.filter((record) => record.taskId !== taskId));
                 console.log(`Delete button clicked for Task ID: ${taskId}`);
             } catch (error) {

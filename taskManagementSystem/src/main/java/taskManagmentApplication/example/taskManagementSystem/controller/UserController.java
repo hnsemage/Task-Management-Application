@@ -50,9 +50,10 @@ public class UserController {
     //To update user by username
     @PutMapping("updateUser/{username}")
     public ResponseEntity<UserEntity> updateUser(@PathVariable String username, @RequestBody UserEntity updatedUser){
-        UserEntity updated= userService.updateUser(username,updatedUser);
-        return new ResponseEntity<>(updated,HttpStatus.OK);
+        UserEntity updated = userService.updateUser(username, updatedUser);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+
 
     //To delete user by username
     @DeleteMapping("deleteUser/{username}")
@@ -61,7 +62,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //To log 
+    //To log
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserEntity user) {
         try {
