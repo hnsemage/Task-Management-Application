@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Container,Button, TextField, FormControl, Box, Typography, MenuItem,styled } from "@mui/material";
 import axios from 'axios';
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate,useParams, useLocation } from "react-router-dom";
 
 
 const BlackMenuItem = styled(MenuItem)({
@@ -20,6 +20,7 @@ function UpdateTask(){
 
     const navigate = useNavigate();
     const{taskId} = useParams();
+    const location = useLocation();
     
     const [user, setUser] = useState({});
     const [task,setTask] = useState({
@@ -146,8 +147,18 @@ function UpdateTask(){
                 console.log('Navigating to user page:', `/userPage/${user.username}`);
                 navigate(`/userPage/${user.username}`);
             } else if (user.role === 'admin') {
-                console.log('Navigating to admin page:', `/adminPage/${user.username}`);
-                navigate(`/adminPage/${user.username}`);
+
+                const { state } = location;
+                const from = state?.from;
+                if (from === "TaskTable") {
+                    console.log('Navigating to admin page:', `/adminPage/${user.username}`);
+                    navigate(`/adminPage/${user.username}`);
+                  } else if (from === "ViewAllTasks") {
+                    navigate('/viewalltasks'); 
+                  } else {
+                    console.error('Unknown source:', from);
+                  }
+                
             } else {
                 console.error('Unknown role:', user.role);
             }

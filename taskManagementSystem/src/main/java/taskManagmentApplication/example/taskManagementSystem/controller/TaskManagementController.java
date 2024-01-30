@@ -49,7 +49,7 @@ public class TaskManagementController {
         }
     }
 
-    //To get all tasks and sort by taskId
+    //To get all tasks and sort by username
     @GetMapping("/getAllTasksOrderByUsername")
     public ResponseEntity<List<TaskManagementEntity>> getAllTasksOrderByUsername() {
         try {

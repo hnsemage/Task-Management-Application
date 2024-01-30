@@ -11,6 +11,7 @@ import UpdateTask from "./Pages/UpdateTask";
 import UpdateUser from "./Pages/UpdateUser";
 import ViewAllTasks from "./Pages/ViewAllTasks";
 import ViewAllUsers from "./Pages/ViewAllUsers";
+import UpdateAllUsers from "./Pages/UpdateAllUsers";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path='/updateUser/:username' element={<UpdateUser/>}/>
           <Route path='/viewalltasks' element={<ViewAllTasks/>}/>
           <Route path='/viewallusers' element={<ViewAllUsers/>}/>
+          <Route path='/updateallusers/:username' element={<UpdateAllUsers/>}/>
         </Routes>
       </Router>
     </div>

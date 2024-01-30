@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from "react";
-import { Container,Box,Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,Button } from "@mui/material";
+import { Container,Box,Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,Button, TextField,FormControl,Select,MenuItem } from "@mui/material";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,9 @@ function ViewAllTasks(){
 
     const [taskData, setTaskData] = useState([]);
     const [username, setUsername] = useState("");
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredTasks, setFilteredTasks] = useState([]);
+    const [sortOption, setSortOption] = useState('none');
 
     useEffect(() =>{
         fetchTasks();
@@ -26,6 +29,12 @@ function ViewAllTasks(){
         }
     };
 
+    const handleUpdate = (taskId) => {
+      const selectedTask = taskData.find((task) => task.taskId === taskId)
+      navigate(`/update/${taskId}`, { state: { from: "ViewAllTasks", task: selectedTask } });
+      console.log(`Update button clicked for Task ID: ${taskId}`);
+    };
+
     const handleDelete = async(taskId) => {
         try{
           await axios.delete(`http://localhost:8080/tasks/deleteTask/${taskId}`);
@@ -36,6 +45,41 @@ function ViewAllTasks(){
           console.error('Error occurred when deleting task: ', error);
         };
       };
+      
+      const handleSearch = (query) => {
+        setSearchQuery(query);
+        if (!query) {
+          setFilteredTasks([]);
+          return;
+        }
+    
+        const filtered = taskData.filter((task) => {
+          return task.taskId.toString().includes(query) || task.taskStatus.toLowerCase().includes(query.toLowerCase()) || task.username.toLowerCase().includes(query.toLowerCase());
+        });
+        setFilteredTasks(filtered);
+      };
+    
+      const handleChange = (e) => {
+        handleSearch(e.target.value);
+      };
+
+      const handleSortChange = (e) =>{
+        setSortOption(e.target.value);
+        if(e.target.value === 'status'){
+          const sorted = [...taskData].sort((a,b) => a.taskStatus.localeCompare(b.taskStatus));
+          setTaskData(sorted);
+          } else if (e.target.value === 'none') {
+          setTaskData(taskData.sort((a, b) => a.taskId - b.taskId)); // Sort by taskId
+        } else if (e.target.value === 'username') {
+          setTaskData(taskData.sort((a, b) => a.username.localeCompare(b.username)));
+        }else if (e.target.value === 'startDate') {
+          setTaskData(taskData.sort((a, b) => a.startDate.localeCompare(b.startDate)));
+        }else if (e.target.value === 'endDate') {
+          setTaskData(taskData.sort((a, b) => a.endDate.localeCompare(b.endDate)));
+        }
+      }
+      
+    const tasksToDisplay = searchQuery ? filteredTasks : taskData;
 
     return(
         <Container>
@@ -43,6 +87,44 @@ function ViewAllTasks(){
             <Typography variant="h3" style={{fontFamily: "Inika", fontSize: 45, fontWeight: "bold", color: "#C0C2E3", }} component="div" gutterBottom>
                 All Tasks
             </Typography>
+            <TextField
+      label="Search"
+      variant='filled'
+      value={searchQuery}
+      onChange={handleChange}
+
+      style={{marginBottom:'20px', marginRight:'20px'}}
+      sx={{
+        width: "20ch",
+        backgroundColor: "#BADFE7",
+        color: "black",
+        fontWeight: "bold",
+        fontFamily: "Inika",
+        fontSize: 20,
+        borderRadius:'10px'
+      }}/>
+      <FormControl variant="outlined" style={{ marginBottom: '16px' }}>
+        <Select
+          value={sortOption}
+          onChange={handleSortChange}
+          
+          sx={{
+            width: "20ch",
+            backgroundColor: "#BADFE7",
+            color: "black",
+            fontWeight: "bold",
+            fontFamily: "Inika",
+            fontSize: 20,
+            borderRadius:'10px'
+          }}
+        >
+          <MenuItem value="none" selected>Sort By</MenuItem>
+          <MenuItem value="status">Task Status</MenuItem>
+          <MenuItem value="username">Username</MenuItem>
+          <MenuItem value="startDate">Start Date</MenuItem>
+          <MenuItem value="endDate">End Date</MenuItem>
+        </Select>
+      </FormControl>
             </Box>
             <TableContainer component={Paper} style={{backgroundColor: "rgba(186, 223, 231, 0.7)",textAlign: 'center'}} sx={{ maxWidth: 1500,marginLeft:3,marginRight:10,marginBottom:2,borderRadius:2}} align="center">
                 <Table>
@@ -59,7 +141,7 @@ function ViewAllTasks(){
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {taskData.map((task,index)=>(
+                        {tasksToDisplay.map((task,index)=>(
                             <TableRow key={index}>
                                 <TableCell style={{ border: '1px solid white'}} align="center">{task.taskId}</TableCell>
                                 <TableCell style={{ border: '1px solid white'}} align="center">{task.taskName}</TableCell>
@@ -69,7 +151,7 @@ function ViewAllTasks(){
                                 <TableCell style={{ border: '1px solid white'}} align="center">{task.endDate}</TableCell>
                                 <TableCell style={{ border: '1px solid white'}} align="center">{task.taskStatus}</TableCell>
                                 <TableCell style={{ border: '1px solid white'}} align="center">
-                                <Button variant="contained"   style={{ margin: '8px' }}
+                                <Button variant="contained"   onClick={() => handleUpdate(task.taskId)} style={{ margin: '8px' }}
                                     sx={{
                                         backgroundColor: "#314247",
                                         color: "#BADFE7",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,Button, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,Button, TextField, FormControl, Select, MenuItem } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
 const TaskTable = ({ taskData , setTaskData}) => {
@@ -12,7 +12,7 @@ const TaskTable = ({ taskData , setTaskData}) => {
   
   const handleUpdate = (taskId) => {
     const selectedTask = taskData.find((task) => task.taskId === taskId)
-    navigate(`/update/${taskId}`, {state:selectedTask});
+    navigate(`/update/${taskId}`, { state: { from: "TaskTable", task: selectedTask } });
     console.log(`Update button clicked for Task ID: ${taskId}`);
   };
   
